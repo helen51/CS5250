@@ -40,7 +40,6 @@ int onebyte_release(struct inode *inode, struct file *filep)
 ssize_t onebyte_read(struct file *filep, char *buf, size_t count, loff_t *f_pos)
 {
 	/*please complete the function on your own*/
-	ssize_t size = 0;
 	if(onebyte_data != NULL && count > 0 && *f_pos == 0) {
 		num_byte_fail = copy_to_user(buf, &kbuffer[*f_pos], 1);
 		*f_pos += 1;
@@ -56,6 +55,13 @@ ssize_t onebyte_read(struct file *filep, char *buf, size_t count, loff_t *f_pos)
 ssize_t onebyte_write(struct file *filep, const char *buf, size_t count, loff_t *f_pos)
 {
 	/*please complete the function on your own*/
+	if(onebyte_data != NULL && count > 0 && *f_pos == 0) {
+		num_byte_fail = copy_from_user(buf, &kbuffer[*f_pos], 1);
+		*f_pos += 1;
+	} else {
+		return -ENOSPC;
+	}
+	return 1;
 }
 
 static int onebyte_init(void)
