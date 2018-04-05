@@ -40,28 +40,31 @@ int onebyte_release(struct inode *inode, struct file *filep)
 ssize_t onebyte_read(struct file *filep, char *buf, size_t count, loff_t *f_pos)
 {
 	/*please complete the function on your own*/
-	if(onebyte_data != NULL && count > 0 && *f_pos == 0) {
-		num_byte_fail = copy_to_user(buf, &kbuffer[*f_pos], 1);
-		*f_pos += 1;
-		if(num_byte_fail < 0) {
-			return -EFAULT;
-		}
-	} else {
-		return 0;
-	}
-	return 1;
+//	if(onebyte_data != NULL && count > 0 && *f_pos == 0) {
+//		copy_to_user(buf, &kbuffer[*f_pos], 1);
+//		*f_pos += 1;
+//	} else {
+//		return 0;
+//	}
+//	return 1;
+	return simple_read_from_buffer(buf, count, f_pos, onebyte_data, 1);
 }
 
 ssize_t onebyte_write(struct file *filep, const char *buf, size_t count, loff_t *f_pos)
 {
 	/*please complete the function on your own*/
-	if(onebyte_data != NULL && count > 0 && *f_pos == 0) {
-		num_byte_fail = copy_from_user(buf, &kbuffer[*f_pos], 1);
-		*f_pos += 1;
-	} else {
+//	if(onebyte_data != NULL && count > 0 && *f_pos == 0) {
+//		copy_from_user(buf, &kbuffer[*f_pos], 1);
+//		*f_pos += 1;
+//	} else {
+//		return -ENOSPC;
+//	}
+//	return 1;
+	if(count > 1) {
 		return -ENOSPC;
+	} else {
+		return simple_write_to_buffer(onebyte_data, 1, f_pos, buf, count);
 	}
-	return 1;
 }
 
 static int onebyte_init(void)
