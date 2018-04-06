@@ -1,9 +1,3 @@
-VERSION = 4
-PATCHLEVEL = 15
-SUBLEVEL = 0
-EXTRAVERSION =
-NAME = Fearless Coyote
-
 obj-m += one.o
 
 all: 
